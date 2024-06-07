@@ -5,11 +5,13 @@ turn_X_O = 'X'
 
 running = True
 
+# Create a board of game
 def create_board():
     return [[1, 2, 3],
             [4, 5, 6],
             [7, 8, 9]]
 
+# Show board on screen
 def display_board(board):
     for n in range(3):
         for i in range(3):
@@ -28,62 +30,91 @@ def display_board(board):
         print("+" + "-" * 7, end="")
     print("+")
 
+# Generate random number for machine play
 def random_position():
     return randrange(1, 10)
 
+def verify_empty_squares(positon, value_x_or_o):
+    for row in range(0, 3):
+        for column in range(0, 3):
+            square = board[row][column]
+            if positon == square and square != 'X' and square != 'O':
+                board[row][column] = value_x_or_o
+                return True
+    print("This square is filled")
+    return False
+
+# Machine turn
 def machine_turn(board):
-    pos_fill = False
+    pos_filled = False
     
-    while pos_fill == False:
-        random_pos = random_position()
-        
-        for row in range(0, 3):
-            if pos_fill == True:
-                break
-            for column in range(0, 3):
-                square = board[row][column]
-                if random_pos == square and square != 'X' and square != 'O':
-                    board[row][column] = 'X'
-                    pos_fill = True
-                    break
-                
+    while pos_filled == False:
+        random_pos = random_position()    
+        pos_filled = verify_empty_squares(random_pos, 'X')
+
+def valid_input_user(input_user):
+    for n in range(1, 10):
+        if input_user == n:
+            return True
+    print("Out of range")
+    return False
+    
+# Player turn
 def player_turn(board):
-    selected_pos = int(input("Enter your move: "))
+    pos_filled = False
     
-    for row in range(0, 3):
-        for column in range(0, 3):
-            square = board[row][column]
-            if selected_pos == square:
-                board[row][column] = 'O'
-                
-def player_result(board):
-    if board[0][0] == 'O' and board[0][1] == 'O' and board[0][2] == 'O' or \
-    board[1][0] == 'O' and board[1][1] == 'O' and board[1][2] == 'O' or \
-    board[2][0] == 'O' and board[2][1] == 'O' and board[2][2] == 'O' or \
-    board[0][0] == 'O' and board[1][0] == 'O' and board[2][0] == 'O' or \
-    board[0][1] == 'O' and board[1][1] == 'O' and board[2][1] == 'O' or \
-    board[0][0] == 'O' and board[1][1] == 'O' and board[2][2] == 'O' or \
-    board[0][2] == 'O' and board[1][1] == 'O' and board[2][0] == 'O':
+    while pos_filled == False:
+        try:
+            selected_pos = int(input("Enter your move: "))            
+        except ValueError:
+            print("This is invalid value")
+            continue
+        
+        if valid_input_user(selected_pos):
+            pos_filled = verify_empty_squares(selected_pos, 'O')
+                    
+
+def results_standarts(board, value_x_or_o):
+    if board[0][0] == value_x_or_o and board[0][1] == value_x_or_o and board[0][2] == value_x_or_o or \
+    board[1][0] == value_x_or_o and board[1][1] == value_x_or_o and board[1][2] == value_x_or_o or \
+    board[2][0] == value_x_or_o and board[2][1] == value_x_or_o and board[2][2] == value_x_or_o or \
+    board[0][0] == value_x_or_o and board[1][0] == value_x_or_o and board[2][0] == value_x_or_o or \
+    board[0][1] == value_x_or_o and board[1][1] == value_x_or_o and board[2][1] == value_x_or_o or \
+    board[0][0] == value_x_or_o and board[1][1] == value_x_or_o and board[2][2] == value_x_or_o or \
+    board[0][2] == value_x_or_o and board[1][1] == value_x_or_o and board[2][0] == value_x_or_o:
         return True
     return False
-    
-def machine_result(board):
-    if board[0][0] == 'X' and board[0][1] == 'X' and board[0][2] == 'X' or \
-    board[1][0] == 'X' and board[1][1] == 'X' and board[1][2] == 'X' or \
-    board[2][0] == 'X' and board[2][1] == 'X' and board[2][2] == 'X' or \
-    board[0][0] == 'X' and board[1][0] == 'X' and board[2][0] == 'X' or \
-    board[0][1] == 'X' and board[1][1] == 'X' and board[2][1] == 'X' or \
-    board[0][0] == 'X' and board[1][1] == 'X' and board[2][2] == 'X' or \
-    board[0][2] == 'X' and board[1][1] == 'X' and board[2][0] == 'X':
-        return True
-    return False
-    
+
+# # Verify if player won
+# def player_result(board):
+#     if board[0][0] == 'O' and board[0][1] == 'O' and board[0][2] == 'O' or \
+#     board[1][0] == 'O' and board[1][1] == 'O' and board[1][2] == 'O' or \
+#     board[2][0] == 'O' and board[2][1] == 'O' and board[2][2] == 'O' or \
+#     board[0][0] == 'O' and board[1][0] == 'O' and board[2][0] == 'O' or \
+#     board[0][1] == 'O' and board[1][1] == 'O' and board[2][1] == 'O' or \
+#     board[0][0] == 'O' and board[1][1] == 'O' and board[2][2] == 'O' or \
+#     board[0][2] == 'O' and board[1][1] == 'O' and board[2][0] == 'O':
+#         return True
+#     return False
+
+# # Verify if machine won
+# def machine_result(board):
+#     if board[0][0] == 'X' and board[0][1] == 'X' and board[0][2] == 'X' or \
+#     board[1][0] == 'X' and board[1][1] == 'X' and board[1][2] == 'X' or \
+#     board[2][0] == 'X' and board[2][1] == 'X' and board[2][2] == 'X' or \
+#     board[0][0] == 'X' and board[1][0] == 'X' and board[2][0] == 'X' or \
+#     board[0][1] == 'X' and board[1][1] == 'X' and board[2][1] == 'X' or \
+#     board[0][0] == 'X' and board[1][1] == 'X' and board[2][2] == 'X' or \
+#     board[0][2] == 'X' and board[1][1] == 'X' and board[2][0] == 'X':
+#         return True
+#     return False
+
+# Verify if draw
 def draw(board, p_result, m_result):
-    print(p_result, m_result)
     for row in range(0, 3):
         for column in range(0, 3):
             square = board[row][column]
-            if square != 'X' or square != 'O':
+            if square != 'X' and square != 'O':
                 return False
     if p_result == False and m_result == False:
         return True
@@ -100,33 +131,32 @@ while running:
         turn_X_O = 'O'
         display_board(board)
    
-    m_result = machine_result(board)
+    m_result = results_standarts(board, 'X')
     
     if draw(board, p_result, m_result):
         print("Draw!")
-        running = False
-        continue
+        break
         
     if m_result:
         print("You lose!")
-        running = False
-        continue
+        break
         
     if turn_X_O == 'O':
         player_turn(board)
         turn_X_O = 'X'
         display_board(board)
             
-    p_result = player_result(board)
+    p_result = results_standarts(board, 'O')
     
     if p_result:
         print("You won!")
-        running = False
-        continue
+        break
         
     sleep(2)
-         
+       
 """
+Board prototipe
+
 +-------+-------+-------+
 |       |       |       |
 |   O   |   X   |   X   |
